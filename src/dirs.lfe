@@ -1,5 +1,22 @@
 (defmodule dirs
-  (export all))
+  (export
+   (home 0)
+   (cache 0)
+   (config 0) (config-local 0) (config_local 0)
+   (data 0) (data-local 0) (data_local 0)
+   (executable 0)
+   (preference 0)
+   (runtime 0)
+   (state 0)
+   (audio 0)
+   (desktop 0)
+   (document 0)
+   (download 0)
+   (font 0)
+   (picture 0)
+   (public 0)
+   (template 0)
+   (video 0)))
 
 ;;; Returns the path to the user's home directory.
 ;;;
@@ -25,14 +42,8 @@
 ;;;
 ;;; All the examples on this page mentioning `$HOME` use this behavior.
 ;;;
-;;; _Note:_ This function's behavior differs from [`std::env::home_dir`],
-;;; which works incorrectly on Linux, macOS and Windows.
-;;;
-;;; [`std::env::home_dir`]: https://doc.rust-lang.org/std/env/fn.home_dir.html
 
-;;pub fn home_dir() -> Option<PathBuf> {
-;;    sys::home_dir()
-;;}
+(defun home() (dispatch 'home))
 
 ;;; Returns the path to the user's cache directory.
 ;;;
@@ -44,9 +55,7 @@
 ;;; | macOS   | `$HOME`/Library/Caches              | /Users/Alice/Library/Caches  |
 ;;; | Windows | `{FOLDERID_LocalAppData}`           | C:\Users\Alice\AppData\Local |
 
-;;pub fn cache_dir() -> Option<PathBuf> {
-;;    sys::cache_dir()
-;;}
+(defun cache() (dispatch 'cache))
 
 ;;; Returns the path to the user's config directory.
 ;;;
@@ -58,9 +67,7 @@
 ;;; | macOS   | `$HOME`/Library/Application Support   | /Users/Alice/Library/Application Support |
 ;;; | Windows | `{FOLDERID_RoamingAppData}`           | C:\Users\Alice\AppData\Roaming           |
 
-;;pub fn config_dir() -> Option<PathBuf> {
-;;    sys::config_dir()
-;;}
+(defun config() (dispatch 'config))
 
 ;;; Returns the path to the user's local config directory.
 ;;;
@@ -72,9 +79,8 @@
 ;;; | macOS   | `$HOME`/Library/Application Support   | /Users/Alice/Library/Application Support |
 ;;; | Windows | `{FOLDERID_LocalAppData}`             | C:\Users\Alice\AppData\Local             |
 
-;;pub fn config_local_dir() -> Option<PathBuf> {
-;;    sys::config_local_dir()
-;;}
+(defun config-local() (dispatch 'config-local))
+(defun config_local() (dispatch 'config-local)) ; for Erlanger's
 
 ;;; Returns the path to the user's data directory.
 ;;;
@@ -86,9 +92,7 @@
 ;;; | macOS   | `$HOME`/Library/Application Support      | /Users/Alice/Library/Application Support |
 ;;; | Windows | `{FOLDERID_RoamingAppData}`              | C:\Users\Alice\AppData\Roaming           |
 
-;;pub fn data_dir() -> Option<PathBuf> {
-;;    sys::data_dir()
-;;}
+(defun data() (dispatch 'data))
 
 ;;; Returns the path to the user's local data directory.
 ;;;
@@ -100,9 +104,8 @@
 ;;; | macOS   | `$HOME`/Library/Application Support      | /Users/Alice/Library/Application Support |
 ;;; | Windows | `{FOLDERID_LocalAppData}`                | C:\Users\Alice\AppData\Local             |
 
-;;pub fn data_local_dir() -> Option<PathBuf> {
-;;    sys::data_local_dir()
-;;}
+(defun data-local() (dispatch 'data-local))
+(defun data_local() (dispatch 'data-local)) ; for Erlanger's
 
 ;;; Returns the path to the user's executable directory.
 ;;;
@@ -114,9 +117,7 @@
 ;;; | macOS   | –                                                                | –                      |
 ;;; | Windows | –                                                                | –                      |
 
-;;pub fn executable_dir() -> Option<PathBuf> {
-;;    sys::executable_dir()
-;;}
+(defun executable() (dispatch 'executable))
 
 ;;; Returns the path to the user's preference directory.
 ;;;
@@ -128,9 +129,7 @@
 ;;; | macOS   | `$HOME`/Library/Preferences           | /Users/Alice/Library/Preferences |
 ;;; | Windows | `{FOLDERID_RoamingAppData}`           | C:\Users\Alice\AppData\Roaming   |
 
-;;pub fn preference_dir() -> Option<PathBuf> {
-;;    sys::preference_dir()
-;;}
+(defun preference() (dispatch 'preference))
 
 ;;; Returns the path to the user's runtime directory.
 ;;;
@@ -145,9 +144,7 @@
 ;;; | macOS   | –                  | –               |
 ;;; | Windows | –                  | –               |
 
-;;pub fn runtime_dir() -> Option<PathBuf> {
-;;    sys::runtime_dir()
-;;}
+(defun runtime() (dispatch 'runtime))
 
 ;;; Returns the path to the user's state directory.
 ;;;
@@ -163,9 +160,7 @@
 ;;; | macOS   | –                                         | –                        |
 ;;; | Windows | –                                         | –                        |
 
-;;pub fn state_dir() -> Option<PathBuf> {
-;;    sys::state_dir()
-;;}
+(defun state() (dispatch 'state))
 
 ;;; Returns the path to the user's audio directory.
 ;;;
@@ -177,9 +172,7 @@
 ;;; | macOS   | `$HOME`/Music      | /Users/Alice/Music   |
 ;;; | Windows | `{FOLDERID_Music}` | C:\Users\Alice\Music |
 
-;;pub fn audio_dir() -> Option<PathBuf> {
-;;    sys::audio_dir()
-;;}
+(defun audio() (dispatch 'audio))
 
 ;;; Returns the path to the user's desktop directory.
 ;;;
@@ -191,9 +184,7 @@
 ;;; | macOS   | `$HOME`/Desktop      | /Users/Alice/Desktop   |
 ;;; | Windows | `{FOLDERID_Desktop}` | C:\Users\Alice\Desktop |
 
-;;pub fn desktop_dir() -> Option<PathBuf> {
-;;    sys::desktop_dir()
-;;}
+(defun desktop() (dispatch 'desktop))
 
 ;;; Returns the path to the user's document directory.
 ;;;
@@ -205,9 +196,7 @@
 ;;; | macOS   | `$HOME`/Documents      | /Users/Alice/Documents   |
 ;;; | Windows | `{FOLDERID_Documents}` | C:\Users\Alice\Documents |
 
-;;pub fn document_dir() -> Option<PathBuf> {
-;;    sys::document_dir()
-;;}
+(defun document() (dispatch 'document))
 
 ;;; Returns the path to the user's download directory.
 ;;;
@@ -219,9 +208,7 @@
 ;;; | macOS   | `$HOME`/Downloads      | /Users/Alice/Downloads   |
 ;;; | Windows | `{FOLDERID_Downloads}` | C:\Users\Alice\Downloads |
 
-;;pub fn download_dir() -> Option<PathBuf> {
-;;    sys::download_dir()
-;;}
+(defun download() (dispatch 'download))
 
 ;;; Returns the path to the user's font directory.
 ;;;
@@ -233,9 +220,7 @@
 ;;; | macOS   | `$HOME/Library/Fonts`                                | /Users/Alice/Library/Fonts     |
 ;;; | Windows | –                                                    | –                              |
 
-;;pub fn font_dir() -> Option<PathBuf> {
-;;    sys::font_dir()
-;;}
+(defun font() (dispatch 'font))
 
 ;;; Returns the path to the user's picture directory.
 ;;;
@@ -247,9 +232,7 @@
 ;;; | macOS   | `$HOME`/Pictures      | /Users/Alice/Pictures   |
 ;;; | Windows | `{FOLDERID_Pictures}` | C:\Users\Alice\Pictures |
 
-;;pub fn picture_dir() -> Option<PathBuf> {
-;;    sys::picture_dir()
-;;}
+(defun picture() (dispatch 'picture))
 
 ;;; Returns the path to the user's public directory.
 ;;;
@@ -261,9 +244,7 @@
 ;;; | macOS   | `$HOME`/Public        | /Users/Alice/Public |
 ;;; | Windows | `{FOLDERID_Public}`   | C:\Users\Public     |
 
-;;pub fn public_dir() -> Option<PathBuf> {
-;;    sys::public_dir()
-;;}
+(defun public() (dispatch 'public))
 
 ;;; Returns the path to the user's template directory.
 ;;;
@@ -275,9 +256,7 @@
 ;;; | macOS   | –                      | –                                                          |
 ;;; | Windows | `{FOLDERID_Templates}` | C:\Users\Alice\AppData\Roaming\Microsoft\Windows\Templates |
 
-;;pub fn template_dir() -> Option<PathBuf> {
-;;    sys::template_dir()
-;;}
+(defun template() (dispatch 'template))
 
 ;;; Returns the path to the user's video directory.
 ;;;
@@ -289,6 +268,17 @@
 ;;; | macOS   | `$HOME`/Movies      | /Users/Alice/Movies   |
 ;;; | Windows | `{FOLDERID_Videos}` | C:\Users\Alice\Videos |
 
-;;pub fn video_dir() -> Option<PathBuf> {
-;;    sys::video_dir()
-;;}
+(defun video() (dispatch 'video))
+
+;;; Private functions
+
+(defun dispatch (dir-type)
+  ;; Erlang supports some of these natively, but the results in Erlang are not
+  ;; consistent with those of the upstream Rust library. We follow the Rust
+  ;; library's conventions; if you'd like to use Erlang's, then you should use
+  ;; the `filename:basedir` function directly and not use the 'dirs' library.
+  (case (os:type)
+    (#(unix linux) (dirs-lin:assemble dir-type))
+    (#(unix darwin) (dirs-mac:assemble dir-type))
+    (#(win32 _) (dirs-win:assemble dir-type))
+    (os-type #(error (io_lib:format "unsupported OS type ~p" (list os-type))))))

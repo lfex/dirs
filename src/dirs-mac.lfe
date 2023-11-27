@@ -1,30 +1,39 @@
 (defmodule dirs-mac
-  (export all))
+  (export
+   (assemble 1)))
 
-;;extern crate dirs_sys;
+(defun assemble
+  ;; Unsupported
+  (('executable) 'undefined)
+  (('runtime) 'undefined)
+  (('state) 'undefined)
+  (('template) 'undefined)
+  ;; Erlang-supported
+  (('cache) (filename:basedir 'user_cache ""))
+  (('config) (app-support))
+  (('config-local) (app-support))
+  (('data) (app-support))
+  (('data-local) (app-support))
+  ;; Custom
+  (('home) (home))
+  (('preference) (filename:join (list (library) "Preferences")))
+  (('font) (filename:join (list (library) "Fonts")))
+  (('audio) (filename:join (list (home) "Music")))
+  (('desktop) (filename:join (list (home) "Desktop")))
+  (('document) (filename:join (list (home) "Documents")))
+  (('download) (filename:join (list (home) "Downloads")))
+  (('picture) (filename:join (list (home) "Pictures")))
+  (('public) (filename:join (list (home) "Public")))
+  (('video) (filename:join (list (home) "Movies"))))
 
-;;use std::path::PathBuf;
+;;; Private Functions
 
-;;pub fn home_dir()         -> Option<PathBuf> { dirs_sys::home_dir() }
+(defun home ()
+  (let ((`#(ok ((,home . ,_) . ,_)) (init:get_argument 'home)))
+    home))
 
-;;fn app_support_dir()       -> Option<PathBuf> { home_dir().map(|h| h.join("Library/Application Support")) }
+(defun app-support ()
+  (filename:basedir 'user_config ""))
 
-;;pub fn cache_dir()        -> Option<PathBuf> { home_dir().map(|h| h.join("Library/Caches")) }
-;;pub fn config_dir()       -> Option<PathBuf> { app_support_dir() }
-;;pub fn config_local_dir() -> Option<PathBuf> { app_support_dir() }
-;;pub fn data_dir()         -> Option<PathBuf> { app_support_dir() }
-;;pub fn data_local_dir()   -> Option<PathBuf> { app_support_dir() }
-;;pub fn preference_dir()   -> Option<PathBuf> { home_dir().map(|h| h.join("Library/Preferences")) }
-;;pub fn executable_dir()   -> Option<PathBuf> { None }
-;;pub fn runtime_dir()      -> Option<PathBuf> { None }
-;;pub fn state_dir()        -> Option<PathBuf> { None }
-
-;;pub fn audio_dir()        -> Option<PathBuf> { home_dir().map(|h| h.join("Music")) }
-;;pub fn desktop_dir()      -> Option<PathBuf> { home_dir().map(|h| h.join("Desktop")) }
-;;pub fn document_dir()     -> Option<PathBuf> { home_dir().map(|h| h.join("Documents")) }
-;;pub fn download_dir()     -> Option<PathBuf> { home_dir().map(|h| h.join("Downloads")) }
-;;pub fn font_dir()         -> Option<PathBuf> { home_dir().map(|h| h.join("Library/Fonts")) }
-;;pub fn picture_dir()      -> Option<PathBuf> { home_dir().map(|h| h.join("Pictures")) }
-;;pub fn public_dir()       -> Option<PathBuf> { home_dir().map(|h| h.join("Public")) }
-;;pub fn template_dir()     -> Option<PathBuf> { None }
-;;pub fn video_dir()        -> Option<PathBuf> { home_dir().map(|h| h.join("Movies")) }
+(defun library ()
+  (filename:dirname (app-support)))
