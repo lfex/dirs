@@ -35,22 +35,22 @@ Other platforms are also supported; they use the Linux conventions.
 Library run by user `alice` in Erlang:
 
 ```erlang
-1> dirs:home();
+1> dirs:home().
 %% Lin: /home/alice
 %% Win: C:\Users\Alice
 %% Mac: /Users/Alice
 
-2> dirs:audio();
+2> dirs:audio().
 %% Lin: /home/alice/Music
 %% Win: C:\Users\Alice\Music
 %% Mac: /Users/Alice/Music
 
-3> dirs:config();
+3> dirs:config().
 %% Lin: /home/alice/.config
 %% Win: C:\Users\Alice\AppData\Roaming
 %% Mac: /Users/Alice/Library/Application Support
 
-4> dirs:executable();
+4> dirs:executable().
 %% Lin: /home/alice/.local/bin
 %% Win: undefined
 %% Mac: undefined
@@ -106,7 +106,7 @@ lfe> (dirs:executable)
 
 ## Features
 
-| Function name      | Value on Linux/Redox                                                   | Value on Windows                  | Value on macOS                              |
+| Function name      | Value on Linux/Redox                                                   | Value on Windows (not yet impl)                 | Value on macOS                              |
 |--------------------| ---------------------------------------------------------------------- |-----------------------------------| ------------------------------------------- |
 | `dirs:home`         | `$HOME`                                                          | `{FOLDERID_Profile}`        | `$HOME`                               |
 | `dirs:cache`        | `$XDG_CACHE_HOME`         or `$HOME/.cache`              | `{FOLDERID_LocalAppData}`   | `$HOME/Library/Caches`              |
