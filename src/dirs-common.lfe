@@ -1,7 +1,8 @@
 (defmodule dirs-common
   (export
    (abs-path? 1)
-   (home 0)))
+   (home 0)
+   (home-subdir 1)))
 
 (defun abs-path?
   ((`(#\/ . ,_)) 'true)
