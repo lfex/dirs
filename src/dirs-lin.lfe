@@ -1,29 +1,39 @@
 (defmodule dirs-lin
-  (export all))
+  (export
+   (assemble 1)))
 
-;;extern crate dirs_sys;
+(defun assemble
+  (('home) (dirs-common:home))
+  (('cache) (env-or-default "XDG_CACHE_HOME" (dirs-common:home-subdir '(".cache"))))
+  (('config) (config))
+  (('config-local) (config))
+  (('data) (data))
+  (('data-local) (data))
+  (('executable) (env-or-default "XDG_BIN_DIR" (dirs-common:home-subdir '(".local" "bin"))))
+  (('preference) (config))
+  (('runtime) (env-or-default "XDG_RUNTIME_DIR" 'undefined))
+  (('state) (env-or-default "XDG_STATE_DIR" (dirs-common:home-subdir '(".local" "state"))))
+  (('audio) (env-or-default "XDG_MUSIC_DIR" 'undefined))
+  (('desktop) (env-or-default "XDG_DESKTOP_DIR" 'undefined))
+  (('document) (env-or-default "XDG_DOCUMENTS_DIR" 'undefined))
+  (('download) (env-or-default "XDG_DOWNLOAD_DIR" 'undefined))
+  (('font) (filename:join (list (data) "fonts")))
+  (('picture) (env-or-default "XDG_PICTURES_DIR" 'undefined))
+  (('public) (env-or-default "XDG_PUBLICSHARE_DIR" 'undefined))
+  (('template) (env-or-default "XDG_TEMPLATES_DIR" 'undefined))
+  (('video) (env-or-default "XDG_VIDEOS_DIR" 'undefined)))
 
-;;use std::env;
-;;use std::path::PathBuf;
+;;; Private Functions
 
-;;pub fn home_dir()         -> Option<PathBuf> { dirs_sys::home_dir() }
+(defun config ()
+  (env-or-default "XDG_CONFIG_HOME" (dirs-common:home-subdir '(".config"))))
 
-;;pub fn cache_dir()        -> Option<PathBuf> { env::var_os("XDG_CACHE_HOME") .and_then(dirs_sys::is_absolute_path).or_else(|| home_dir().map(|h| h.join(".cache"))) }
-;;pub fn config_dir()       -> Option<PathBuf> { env::var_os("XDG_CONFIG_HOME").and_then(dirs_sys::is_absolute_path).or_else(|| home_dir().map(|h| h.join(".config"))) }
-;;pub fn config_local_dir() -> Option<PathBuf> { config_dir() }
-;;pub fn data_dir()         -> Option<PathBuf> { env::var_os("XDG_DATA_HOME")  .and_then(dirs_sys::is_absolute_path).or_else(|| home_dir().map(|h| h.join(".local/share"))) }
-;;pub fn data_local_dir()   -> Option<PathBuf> { data_dir() }
-;;pub fn preference_dir()   -> Option<PathBuf> { config_dir() }
-;;pub fn runtime_dir()      -> Option<PathBuf> { env::var_os("XDG_RUNTIME_DIR").and_then(dirs_sys::is_absolute_path) }
-;;pub fn state_dir()        -> Option<PathBuf> { env::var_os("XDG_STATE_HOME") .and_then(dirs_sys::is_absolute_path).or_else(|| home_dir().map(|h| h.join(".local/state"))) }
-;;pub fn executable_dir()   -> Option<PathBuf> { env::var_os("XDG_BIN_HOME")   .and_then(dirs_sys::is_absolute_path).or_else(|| home_dir().map(|h| h.join(".local/bin"))) }
-
-;;pub fn audio_dir()        -> Option<PathBuf> { dirs_sys::user_dir("MUSIC") }
-;;pub fn desktop_dir()      -> Option<PathBuf> { dirs_sys::user_dir("DESKTOP") }
-;;pub fn document_dir()     -> Option<PathBuf> { dirs_sys::user_dir("DOCUMENTS") }
-;;pub fn download_dir()     -> Option<PathBuf> { dirs_sys::user_dir("DOWNLOAD") }
-;;pub fn font_dir()         -> Option<PathBuf> { data_dir().map(|d| d.join("fonts")) }
-;;pub fn picture_dir()      -> Option<PathBuf> { dirs_sys::user_dir("PICTURES") }
-;;pub fn public_dir()       -> Option<PathBuf> { dirs_sys::user_dir("PUBLICSHARE") }
-;;pub fn template_dir()     -> Option<PathBuf> { dirs_sys::user_dir("TEMPLATES") }
-;;pub fn video_dir()        -> Option<PathBuf> { dirs_sys::user_dir("VIDEOS") }
+(defun data ()
+  (env-or-default "XDG_DATA_HOME" (dirs-common:home-subdir '(".local" "share"))))
+  
+(defun env-or-default (env-var default)
+  (case (os:getenv env-var)
+    ("" default)
+    (val (if (dirs-common:abs-path? val)
+           val
+           default))))
