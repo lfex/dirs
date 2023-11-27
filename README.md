@@ -25,9 +25,7 @@ The library provides the location of these directories by leveraging the mechani
 
 ## Platforms
 
-This library is written in LFE but can be used transparently in Erlang or Elixir projects (that support rebar3) as if it was an Erlang library. It supports Linux, Redox, macOS and Windows.
-Other platforms are also supported; they use the Linux conventions.
-
+This library is written in LFE but can be used transparently in Erlang or Elixir projects (that support rebar3) as if it was an Erlang library. It supports Linux and macOS; Windows support is pending.
 
 ## Usage
 
