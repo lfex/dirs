@@ -1,5 +1,6 @@
 (defmodule dirs-win
-  (export all))
+  (export
+   (assemble 1)))
 
 ;;extern crate dirs_sys;
 
@@ -26,3 +27,17 @@
 ;;pub fn public_dir()       -> Option<PathBuf> { dirs_sys::known_folder_public()}
 ;;pub fn template_dir()     -> Option<PathBuf> { dirs_sys::known_folder_templates() }
 ;;pub fn video_dir()        -> Option<PathBuf> { dirs_sys::known_folder_videos() }
+
+(defun assemble
+  ;; Unsupported
+  (('executable) 'undefined)
+  (('runtime) 'undefined)
+  (('state) 'undefined)
+  (('font) 'undefined)
+  ;; Erlang-supported
+  (('cache) (filename:basedir 'user_cache ""))
+  (('config) (filename:basedir 'user_config ""))
+  (('config-local) (filename:basedir 'user_config ""))
+  (('data) (filename:basedir 'user_config "share"))
+  ;; Custom
+  )
