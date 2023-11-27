@@ -15,22 +15,18 @@
   (('data) (app-support))
   (('data-local) (app-support))
   ;; Custom
-  (('home) (home))
+  (('home) (dirs-common:home))
   (('preference) (filename:join (list (library) "Preferences")))
   (('font) (filename:join (list (library) "Fonts")))
-  (('audio) (filename:join (list (home) "Music")))
-  (('desktop) (filename:join (list (home) "Desktop")))
-  (('document) (filename:join (list (home) "Documents")))
-  (('download) (filename:join (list (home) "Downloads")))
-  (('picture) (filename:join (list (home) "Pictures")))
-  (('public) (filename:join (list (home) "Public")))
-  (('video) (filename:join (list (home) "Movies"))))
+  (('audio) (dirs-common:home-subdir '("Music")))
+  (('desktop) (dirs-common:home-subdir '("Desktop")))
+  (('document) (dirs-common:home-subdir '("Documents")))
+  (('download) (dirs-common:home-subdir '("Downloads")))
+  (('picture) (dirs-common:home-subdir '("Pictures")))
+  (('public) (dirs-common:home-subdir '("Public")))
+  (('video) (dirs-common:home-subdir '("Movies"))))
 
 ;;; Private Functions
-
-(defun home ()
-  (let ((`#(ok ((,home . ,_) . ,_)) (init:get_argument 'home)))
-    home))
 
 (defun app-support ()
   (filename:basedir 'user_config ""))
