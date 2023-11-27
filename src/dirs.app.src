@@ -1,0 +1,23 @@
+{application, dirs, [
+  {description, "A port of the Rust `dirs` library to LFE/Erlang"},
+  {vsn, "0.0.0"},
+  {registered, []},
+  {mod, {}},
+  {applications, [
+    kernel,
+    stdlib
+  ]},
+  {env,[]},
+  {modules, []},
+
+  {licenses, ["Apache 2.0"]},
+  {links, [
+    {"GitHub", "https://github.com/lfex/dirs"},
+    {"Hex", "https://hex.pm/packages/dirs"}
+  ]},
+  {exclude_files, [
+    "priv/html/*",
+    "priv/images/*",
+    "priv/.DS_Store"
+  ]}
+ ]}.

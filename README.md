@@ -1,9 +1,13 @@
-[![crates.io](https://img.shields.io/crates/v/dirs.svg?style=for-the-badge)](https://crates.io/crates/dirs)
-[![API documentation](https://img.shields.io/docsrs/dirs/latest?style=for-the-badge)](https://docs.rs/dirs/)
-![actively developed](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg?style=for-the-badge)
-![License: MIT/Apache-2.0](https://img.shields.io/badge/license-MIT%2FApache--2.0-orange.svg?style=for-the-badge)
+[![Build Status][gh-actions-badge]][gh-actions]
+[![LFE Versions][lfe badge]][lfe]
+[![Erlang Versions][erlang badge]][versions]
+[![Tags][github tags badge]][github tags]
+
+[![Project Logo][logo]][logo-large]
 
 # `dirs`
+
+*A port of the Rust `dirs` library to LFE/Erlang*
 
 ## Introduction
 
@@ -21,55 +25,59 @@ The library provides the location of these directories by leveraging the mechani
 
 ## Platforms
 
-This library is written in Rust, and supports Linux, Redox, macOS and Windows.
+This library is written in LFE but can be used transparently in Erlang or Elixir projects (that support rebar3) as if it was an Erlang library. It supports Linux, Redox, macOS and Windows.
 Other platforms are also supported; they use the Linux conventions.
 
-The minimal required version of Rust is 1.13 except for Redox, where the minimum Rust version
-depends on the [`redox_users`](https://crates.io/crates/redox_users) crate.
-
-It's mid-level sister library, _directories_, is available for Rust ([directories-rs](https://github.com/dirs-dev/directories-rs))
-and on the JVM ([directories-jvm](https://github.com/dirs-dev/directories-jvm)).
 
 ## Usage
 
-#### Dependency
 
-Add the library as a dependency to your project by inserting
+Library run by user `alice` in Erlang:
 
-```toml
-dirs = "5.0"
+```erlang
+1> dirs:home();
+%% Lin: /home/alice
+%% Win: C:\Users\Alice
+%% Mac: /Users/Alice
+
+2> dirs:audio();
+%% Lin: /home/alice/Music
+%% Win: C:\Users\Alice\Music
+%% Mac: /Users/Alice/Music
+
+3> dirs:config();
+%% Lin: /home/alice/.config
+%% Win: C:\Users\Alice\AppData\Roaming
+%% Mac: /Users/Alice/Library/Application Support
+
+4> dirs:executable();
+%% Lin: /home/alice/.local/bin
+%% Win: undefined
+%% Mac: undefined
 ```
 
-into the `[dependencies]` section of your Cargo.toml file.
+In LFE:
 
-If you are upgrading from version 2, please read the [section on breaking changes](#3) first.
+```lisp
+lfe> (dirs:home)
+;; Lin: /home/alice
+;; Win: C:\Users\Alice
+;; Mac: /Users/Alice
 
-#### Example
+lfe> (dirs:audio)
+;; Lin: /home/alice/Music
+;; Win: C:\Users\Alice\Music
+;; Mac: /Users/Alice/Music
 
-Library run by user Alice:
+lfe> (dirs:config)
+;; Lin: /home/alice/.config
+;; Win: C:\Users\Alice\AppData\Roaming
+;; Mac: /Users/Alice/Library/Application Support
 
-```rust
-extern crate dirs;
-
-dirs::home_dir();
-// Lin: Some(/home/alice)
-// Win: Some(C:\Users\Alice)
-// Mac: Some(/Users/Alice)
-
-dirs::audio_dir();
-// Lin: Some(/home/alice/Music)
-// Win: Some(C:\Users\Alice\Music)
-// Mac: Some(/Users/Alice/Music)
-
-dirs::config_dir();
-// Lin: Some(/home/alice/.config)
-// Win: Some(C:\Users\Alice\AppData\Roaming)
-// Mac: Some(/Users/Alice/Library/Application Support)
-
-dirs::executable_dir();
-// Lin: Some(/home/alice/.local/bin)
-// Win: None
-// Mac: None
+lfe> (dirs:executable)
+;; Lin: /home/alice/.local/bin
+;; Win: undefined
+;; Mac: undefined
 ```
 
 ## Design Goals
@@ -77,8 +85,7 @@ dirs::executable_dir();
 - The _dirs_ library is a low-level crate designed to provide the paths to standard directories
   as defined by operating systems rules or conventions.<br/>
   If your requirements are more complex, e. g. computing cache, config, etc. paths for specific
-  applications or projects, consider using [directories](https://github.com/dirs-dev/directories-rs)
-  instead.
+  applications or projects, consider writing something higher-level that uses `dirs` -- let us know if you do, and we'll link to it!
 - This library does not create directories or check for their existence. The library only provides
   information on what the path to a certain directory _should_ be.<br/>
   How this information is used is a decision that developers need to make based on the requirements
@@ -87,136 +94,57 @@ dirs::executable_dir();
   as there is no discernible benefit in returning a path that points to a user-level, writable
   directory on one operating system, but a system-level, read-only directory on another.<br/>
   The confusion and unexpected failure modes of such an approach would be immense.
-  - `executable_dir` is specified to provide the path to a user-writable directory for binaries.<br/>
-    As such a directory only commonly exists on Linux, it returns `None` on macOS and Windows.
-  - `font_dir` is specified to provide the path to a user-writable directory for fonts.<br/>
-    As such a directory only exists on Linux and macOS, it returns `None` on Windows.
-  - `runtime_dir` is specified to provide the path to a directory for non-essential runtime data.
+  - `executable` is specified to provide the path to a user-writable directory for binaries.<br/>
+    As such a directory only commonly exists on Linux, it returns `undefined` on macOS and Windows.
+  - `font` is specified to provide the path to a user-writable directory for fonts.<br/>
+    As such a directory only exists on Linux and macOS, it returns `undefined` on Windows.
+  - `runtime` is specified to provide the path to a directory for non-essential runtime data.
     It is required that this directory is created when the user logs in, is only accessible by the
     user itself, is deleted when the user logs out, and supports all filesystem features of the
     operating system.<br/>
-    As such a directory only commonly exists on Linux, it returns `None` on macOS and Windows.
+    As such a directory only commonly exists on Linux, it returns `undefined` on macOS and Windows.
 
 ## Features
 
-**If you want to compute the location of cache, config or data directories for your own application or project,
-use `ProjectDirs` of the [directories](https://github.com/dirs-dev/directories-rs) project instead.**
-
 | Function name      | Value on Linux/Redox                                                   | Value on Windows                  | Value on macOS                              |
 |--------------------| ---------------------------------------------------------------------- |-----------------------------------| ------------------------------------------- |
-| `home_dir`         | `Some($HOME)`                                                          | `Some({FOLDERID_Profile})`        | `Some($HOME)`                               |
-| `cache_dir`        | `Some($XDG_CACHE_HOME)`         or `Some($HOME`/.cache`)`              | `Some({FOLDERID_LocalAppData})`   | `Some($HOME`/Library/Caches`)`              |
-| `config_dir`       | `Some($XDG_CONFIG_HOME)`        or `Some($HOME`/.config`)`             | `Some({FOLDERID_RoamingAppData})` | `Some($HOME`/Library/Application Support`)` |
-| `config_local_dir` | `Some($XDG_CONFIG_HOME)`        or `Some($HOME`/.config`)`             | `Some({FOLDERID_LocalAppData})`   | `Some($HOME`/Library/Application Support`)` |
-| `data_dir`         | `Some($XDG_DATA_HOME)`          or `Some($HOME`/.local/share`)`        | `Some({FOLDERID_RoamingAppData})` | `Some($HOME`/Library/Application Support`)` |
-| `data_local_dir`   | `Some($XDG_DATA_HOME)`          or `Some($HOME`/.local/share`)`        | `Some({FOLDERID_LocalAppData})`   | `Some($HOME`/Library/Application Support`)` |
-| `executable_dir`   | `Some($XDG_BIN_HOME)`           or `Some($HOME`/.local/bin`)`          | `None`                            | `None`                                      |
-| `preference_dir`   | `Some($XDG_CONFIG_HOME)`        or `Some($HOME`/.config`)`             | `Some({FOLDERID_RoamingAppData})` | `Some($HOME`/Library/Preferences`)`         |
-| `runtime_dir`      | `Some($XDG_RUNTIME_DIR)`        or `None`                              | `None`                            | `None`                                      |
-| `state_dir`        | `Some($XDG_STATE_HOME)`         or `Some($HOME`/.local/state`)`        | `None`                            | `None`                                      |
-| `audio_dir`        | `Some(XDG_MUSIC_DIR)`           or `None`                              | `Some({FOLDERID_Music})`          | `Some($HOME`/Music/`)`                      |
-| `desktop_dir`      | `Some(XDG_DESKTOP_DIR)`         or `None`                              | `Some({FOLDERID_Desktop})`        | `Some($HOME`/Desktop/`)`                    |
-| `document_dir`     | `Some(XDG_DOCUMENTS_DIR)`       or `None`                              | `Some({FOLDERID_Documents})`      | `Some($HOME`/Documents/`)`                  |
-| `download_dir`     | `Some(XDG_DOWNLOAD_DIR)`        or `None`                              | `Some({FOLDERID_Downloads})`      | `Some($HOME`/Downloads/`)`                  |
-| `font_dir`         | `Some($XDG_DATA_HOME`/fonts/`)` or `Some($HOME`/.local/share/fonts/`)` | `None`                            | `Some($HOME`/Library/Fonts/`)`              |
-| `picture_dir`      | `Some(XDG_PICTURES_DIR)`        or `None`                              | `Some({FOLDERID_Pictures})`       | `Some($HOME`/Pictures/`)`                   |
-| `public_dir`       | `Some(XDG_PUBLICSHARE_DIR)`     or `None`                              | `Some({FOLDERID_Public})`         | `Some($HOME`/Public/`)`                     |
-| `template_dir`     | `Some(XDG_TEMPLATES_DIR)`       or `None`                              | `Some({FOLDERID_Templates})`      | `None`                                      |
-| `video_dir`        | `Some(XDG_VIDEOS_DIR)`          or `None`                              | `Some({FOLDERID_Videos})`         | `Some($HOME`/Movies/`)`                     |
+| `dirs:home`         | `$HOME`                                                          | `{FOLDERID_Profile}`        | `$HOME`                               |
+| `dirs:cache`        | `$XDG_CACHE_HOME`         or `$HOME/.cache`              | `{FOLDERID_LocalAppData}`   | `$HOME/Library/Caches`              |
+| `dirs:config`       | `$XDG_CONFIG_HOME`        or `$HOME/.config`             | `{FOLDERID_RoamingAppData}` | `$HOME/Library/Application Support` |
+| `dirs:config_local` and `dirs:config-local`| `$XDG_CONFIG_HOME`        or `$HOME/.config`             | `{FOLDERID_LocalAppData}`   | `$HOME/Library/Application Support` |
+| `dirs:data`         | `$XDG_DATA_HOME`          or `$HOME/.local/share`       | `{FOLDERID_RoamingAppData}` | `$HOME/Library/Application Support` |
+| `dirs:data_local` and `dirs::data-local`   | `$XDG_DATA_HOME`          or `$HOME/.local/share`        | `{FOLDERID_LocalAppData}`   | `$HOME/Library/Application Support` |
+| `dirs:executable`   | `$XDG_BIN_HOME`           or `$HOME/.local/bin`          | `undefined`                            | `undefined`                                      |
+| `dirs:preference`   | `$XDG_CONFIG_HOME`        or `$HOME/.config`             | `{FOLDERID_RoamingAppData}` | `$HOME/Library/Preferences`         |
+| `dirs:runtime`      | `$XDG_RUNTIME_DIR`        or `undefined`                              | `undefined`                            | `undefined`                                      |
+| `dirs:state`        | `$XDG_STATE_HOME`         or `$HOME/.local/state`        | `undefined`                            | `undefined`                                      |
+| `dirs:audio`        | `XDG_MUSIC_DIR`           or `undefined`                              | `{FOLDERID_Music}`          | `$HOME/Music`                      |
+| `dirs:desktop`      | `XDG_DESKTOP_DIR`         or `undefined`                              | `{FOLDERID_Desktop}`        | `$HOME/Desktop`                    |
+| `dirs:document`     | `XDG_DOCUMENTS_DIR`       or `undefined`                              | `{FOLDERID_Documents}`      | `$HOME/Documents`                  |
+| `dirs:download`     | `XDG_DOWNLOAD_DIR`        or `undefined`                              | `{FOLDERID_Downloads}`      | `$HOME/Downloads`                  |
+| `dirs:font`         | `$XDG_DATA_HOME/fonts` or `$HOME/.local/share/fonts` | `undefined`                            | `$HOME/Library/Fonts`              |
+| `dirs:picture`      | `XDG_PICTURES_DIR`        or `undefined`                              | `{FOLDERID_Pictures}`       | `$HOME/Pictures`                   |
+| `dirs:public`       | `XDG_PUBLICSHARE_DIR`     or `undefined`                              | `{FOLDERID_Public}`         | `$HOME/Public`                     |
+| `dirs:template`     | `XDG_TEMPLATES_DIR`       or `undefined`                              | `{FOLDERID_Templates}`      | `undefined`                                      |
+| `dirs:video`        | `XDG_VIDEOS_DIR`          or `undefined`                              | `{FOLDERID_Videos}`         | `$HOME/Movies`                     |
 
-## Comparison
-
-There are other crates in the Rust ecosystem that try similar or related things.
-Here is an overview of them, combined with ratings on properties that guided the design of this crate.
-
-Please take this table with a grain of salt: a different crate might very well be more suitable for your specific use case.
-(Of course _my_ crate achieves _my_ design goals better than other crates, which might have had different design goals.)
-
-| Library                                                   | Status         | Lin | Mac | Win |Base|User|Proj|Conv|
-| --------------------------------------------------------- | -------------- |:---:|:---:|:---:|:--:|:--:|:--:|:--:|
-| [app_dirs](https://crates.io/crates/app_dirs)             | Unmaintained   |  ✔  |  ✔  |  ✔  | 🞈  | ✖  | ✔  | ✖  |
-| [app_dirs2](https://crates.io/crates/app_dirs2)           | Maintained     |  ✔  |  ✔  |  ✔  | 🞈  | ✖  | ✔  | ✖  |
-| **dirs**                                                  | **Developed**  |  ✔  |  ✔  |  ✔  | ✔  | ✔  | ✖  | ✔  |
-| [directories](https://crates.io/crates/directories)       | Developed      |  ✔  |  ✔  |  ✔  | ✔  | ✔  | ✔  | ✔  |
-| [s_app_dir](https://crates.io/crates/s_app_dir)           | Unmaintained?  |  ✔  |  ✖  |  🞈  | ✖  | ✖  | 🞈  | ✖  |
-| [standard_paths](https://crates.io/crates/standard_paths) | Maintained     |  ✔  |  ✖  |  ✔  | ✔  | ✔  | ✔  | ✖  |
-| [xdg](https://crates.io/crates/xdg)                       | Maintained     |  ✔  |  ✖  |  ✖  | ✔  | ✖  | ✔  | 🞈  |
-| [xdg-basedir](https://crates.io/crates/xdg-basedir)       | Unmaintained?  |  ✔  |  ✖  |  ✖  | ✔   | ✖  | ✖  | 🞈  |
-| [xdg-rs](https://crates.io/crates/xdg-rs)                 | Obsolete       |  ✔  |  ✖  |  ✖  | ✔   | ✖  | ✖  | 🞈  |
-
-- Lin: Linux support
-- Mac: macOS support
-- Win: Windows support
-- Base: Supports [generic base directories](https://github.com/dirs-dev/directories-rs#basedirs)
-- User: Supports [user directories](https://github.com/dirs-dev/directories-rs#userdirs)
-- Proj: Supports [project-specific base directories](https://github.com/dirs-dev/directories-rs#projectdirs)
-- Conv: Follows naming conventions of the operating system it runs on
-
-## Build
-
-It's possible to cross-compile this library if the necessary toolchains are installed with rustup.
-This is helpful to ensure a change hasn't broken code on a different platform.
-
-The following commands will build this library on Linux, macOS and Windows:
-
-```
-cargo build --target=x86_64-unknown-linux-gnu
-cargo build --target=x86_64-pc-windows-gnu
-cargo build --target=x86_64-apple-darwin
-cargo build --target=x86_64-unknown-redox
-```
-
-## Changelog
-
-### 5
-
-- Update `dirs-sys` dependency to `0.4.0`.
-- Add `config_local_dir` for non-roaming configuration on Windows. On non-Windows platforms the behavior is identical to `config dir`.
-
-### 4
-
-- **BREAKING CHANGE** The behavior of `executable_dir` has been adjusted to not depend on `$XDG_DATA_HOME`.
-  Code, which assumed that setting the `$XDG_DATA_HOME` environment variable also impacted `executable_dir` if
-  the `$XDG_BIN_HOME` environment variable was not set, requires adjustment.
-- Add support for `XDG_STATE_HOME`.
-
-### 3
-
-- **BREAKING CHANGE** The behavior of `config_dir` on macOS has been adjusted
-  (thanks to [everyone involved](https://github.com/dirs-dev/directories-rs/issues/62)):
-  - The existing `config_dir` function has been changed to return the `Application Support`
-    directory on macOS, as suggested by Apple documentation.
-  - The behavior of the `config_dir` function on non-macOS platforms has not been changed.
-  - If you have used the `config_dir` function to store files, it may be necessary to write code
-    that migrates the files to the new location on macOS.<br/>
-    (Alternative: change uses of the `config_dir` function to uses of the `preference_dir` function
-    to retain the old behavior.)
-- The newly added `preference_dir` function returns the `Preferences` directory on macOS now,
-  which – according to Apple documentation – shall only be used to store .plist files using
-  Apple-proprietary APIs.
-  – `preference_dir` and `config_dir` behave identical on non-macOS platforms.
-
-### 2
-
-**BREAKING CHANGE** The behavior of deactivated, missing or invalid [_XDG User Dirs_](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/)
-entries on Linux has been improved (contributed by @tmiasko, thank you!):
-
-- Version 1 returned the user's home directory (`Some($HOME)`) for such faulty entries, except for a faulty `XDG_DESKTOP_DIR` entry which returned (`Some($HOME/Desktop)`).
-- Version 2 returns `None` for such entries.
 
 ## License
 
-Licensed under either of
+Apache License, Version 2.0
 
- * Apache License, Version 2.0
-   ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
- * MIT license
-   ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+Copyright © 2023, Duncan McGreggor <oubiwann@gmail.com>.
 
-at your option.
+[//]: ---Named-Links---
 
-## Contribution
-
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
-dual licensed as above, without any additional terms or conditions.
+[logo]: priv/images/logo.png
+[logo-large]: priv/images/logo-large.png
+[screenshot]: priv/images/screenshot.png
+[gh-actions-badge]: https://github.com/lfex/dirs/workflows/ci%2Fcd/badge.svg
+[gh-actions]: https://github.com/lfex/dirs/actions
+[lfe]: https://github.com/lfe/lfe
+[lfe badge]: https://img.shields.io/badge/lfe-2.1+-blue.svg
+[erlang badge]: https://img.shields.io/badge/erlang-21%20to%2025-blue.svg
+[versions]: https://github.com/lfex/dirs/blob/main/rebar.config
+[github tags]: https://github.com/lfex/dirs/tags
+[github tags badge]: https://img.shields.io/github/tag/lfex/dirs.svg
