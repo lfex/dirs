@@ -7,7 +7,7 @@
 
 # `dirs`
 
-*A port of the Rust `dirs` library to LFE/Erlang*
+*A low-level library that provides config/cache/data paths, following the respective conventions on Linux, macOS and Windows (port of the Rust `dirs` library to LFE/Erlang)*
 
 ## Introduction
 
