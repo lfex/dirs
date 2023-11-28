@@ -1,5 +1,5 @@
 {application, dirs, [
-  {description, "A port of the Rust `dirs` library to LFE/Erlang"},
+  {description, "A low-level library that provides config/cache/data paths, following the respective conventions on Linux, macOS and Windows"},
   {vsn, "0.2.0"},
   {registered, []},
   {mod, {}},
