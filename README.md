@@ -78,6 +78,19 @@ lfe> (dirs:executable)
 ;; Mac: undefined
 ```
 
+Note that all `dirs:*` functions support an additional arity, allowing one to append one or more path segments to the given directory:
+
+``` erlang
+1> dirs:home("lab").
+"/Users/oubiwann/lab"
+2> dirs:home(["lab", "lfe"]).
+"/Users/oubiwann/lab/lfe"
+3> dirs:video(["Conferences", "EUC", 2019, drafts]).
+"/Users/oubiwann/Movies/Conferences/EUC/2019/drafts"
+4> dirs:cache([2023,11,27,d34db33fcafe,0,1,5,12,42]).
+"/Users/oubiwann/Library/Caches/2023/11/27/d34db33fcafe/0/1/5/12/42"
+```
+
 ## Design Goals
 
 - The _dirs_ library is a low-level crate designed to provide the paths to standard directories

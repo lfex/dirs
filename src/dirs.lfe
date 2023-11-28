@@ -1,22 +1,24 @@
 (defmodule dirs
   (export
-   (home 0)
-   (cache 0)
+   (home 0) (home 1)
+   (cache 0) (cache 1)
    (config 0) (config-local 0) (config_local 0)
+   (config 1) (config-local 1) (config_local 1)
    (data 0) (data-local 0) (data_local 0)
-   (executable 0)
-   (preference 0)
-   (runtime 0)
-   (state 0)
-   (audio 0)
-   (desktop 0)
-   (document 0)
-   (download 0)
-   (font 0)
-   (picture 0)
-   (public 0)
-   (template 0)
-   (video 0)))
+   (data 1) (data-local 1) (data_local 1)
+   (executable 0) (executable 1)
+   (preference 0) (preference 1)
+   (runtime 0) (runtime 1)
+   (state 0) (state 1)
+   (audio 0) (audio 1)
+   (desktop 0) (desktop 1)
+   (document 0) (document 1)
+   (download 0) (download 1)
+   (font 0) (font 1)
+   (picture 0) (picture 1)
+   (public 0) (public 1)
+   (template 0) (template 1)
+   (video 0) (video 1)))
 
 ;;; Returns the path to the user's home directory.
 ;;;
@@ -43,7 +45,8 @@
 ;;; All the examples on this page mentioning `$HOME` use this behavior.
 ;;;
 
-(defun home() (dispatch 'home))
+(defun home () (assemble 'home '()))
+(defun home (path-segs) (assemble 'home path-segs))
 
 ;;; Returns the path to the user's cache directory.
 ;;;
@@ -55,7 +58,8 @@
 ;;; | macOS   | `$HOME`/Library/Caches              | /Users/Alice/Library/Caches  |
 ;;; | Windows | `{FOLDERID_LocalAppData}`           | C:\Users\Alice\AppData\Local |
 
-(defun cache() (dispatch 'cache))
+(defun cache () (assemble 'cache '()))
+(defun cache (path-segs) (assemble 'cache path-segs))
 
 ;;; Returns the path to the user's config directory.
 ;;;
@@ -67,7 +71,8 @@
 ;;; | macOS   | `$HOME`/Library/Application Support   | /Users/Alice/Library/Application Support |
 ;;; | Windows | `{FOLDERID_RoamingAppData}`           | C:\Users\Alice\AppData\Roaming           |
 
-(defun config() (dispatch 'config))
+(defun config () (assemble 'config '()))
+(defun config (path-segs) (assemble 'config path-segs))
 
 ;;; Returns the path to the user's local config directory.
 ;;;
@@ -79,8 +84,13 @@
 ;;; | macOS   | `$HOME`/Library/Application Support   | /Users/Alice/Library/Application Support |
 ;;; | Windows | `{FOLDERID_LocalAppData}`             | C:\Users\Alice\AppData\Local             |
 
-(defun config-local() (dispatch 'config-local))
-(defun config_local() (dispatch 'config-local)) ; for Erlanger's
+(defun config-local () (assemble 'config-local '()))
+(defun config-local (path-segs) (assemble 'config-local path-segs))
+
+;; for Erlanger's
+
+(defun config_local () (assemble 'config-local '()))
+(defun config_local (path-segs) (assemble 'config-local path-segs))
 
 ;;; Returns the path to the user's data directory.
 ;;;
@@ -92,7 +102,8 @@
 ;;; | macOS   | `$HOME`/Library/Application Support      | /Users/Alice/Library/Application Support |
 ;;; | Windows | `{FOLDERID_RoamingAppData}`              | C:\Users\Alice\AppData\Roaming           |
 
-(defun data() (dispatch 'data))
+(defun data () (assemble 'data '()))
+(defun data (path-segs) (assemble 'data path-segs))
 
 ;;; Returns the path to the user's local data directory.
 ;;;
@@ -104,8 +115,13 @@
 ;;; | macOS   | `$HOME`/Library/Application Support      | /Users/Alice/Library/Application Support |
 ;;; | Windows | `{FOLDERID_LocalAppData}`                | C:\Users\Alice\AppData\Local             |
 
-(defun data-local() (dispatch 'data-local))
-(defun data_local() (dispatch 'data-local)) ; for Erlanger's
+(defun data-local () (assemble 'data-local '()))
+(defun data-local (path-segs) (assemble 'data-local path-segs))
+
+;; for Erlanger's
+
+(defun data_local () (assemble 'data-local '()))
+(defun data_local (path-segs) (assemble 'data-local path-segs))
 
 ;;; Returns the path to the user's executable directory.
 ;;;
@@ -117,7 +133,8 @@
 ;;; | macOS   | –                                                                | –                      |
 ;;; | Windows | –                                                                | –                      |
 
-(defun executable() (dispatch 'executable))
+(defun executable () (assemble 'executable '()))
+(defun executable (path-segs) (assemble 'executable path-segs))
 
 ;;; Returns the path to the user's preference directory.
 ;;;
@@ -129,7 +146,8 @@
 ;;; | macOS   | `$HOME`/Library/Preferences           | /Users/Alice/Library/Preferences |
 ;;; | Windows | `{FOLDERID_RoamingAppData}`           | C:\Users\Alice\AppData\Roaming   |
 
-(defun preference() (dispatch 'preference))
+(defun preference () (assemble 'preference '()))
+(defun preference (path-segs) (assemble 'preference path-segs))
 
 ;;; Returns the path to the user's runtime directory.
 ;;;
@@ -144,7 +162,8 @@
 ;;; | macOS   | –                  | –               |
 ;;; | Windows | –                  | –               |
 
-(defun runtime() (dispatch 'runtime))
+(defun runtime () (assemble 'runtime '()))
+(defun runtime (path-segs) (assemble 'runtime path-segs))
 
 ;;; Returns the path to the user's state directory.
 ;;;
@@ -160,7 +179,8 @@
 ;;; | macOS   | –                                         | –                        |
 ;;; | Windows | –                                         | –                        |
 
-(defun state() (dispatch 'state))
+(defun state () (assemble 'state '()))
+(defun state (path-segs) (assemble 'state path-segs))
 
 ;;; Returns the path to the user's audio directory.
 ;;;
@@ -172,7 +192,8 @@
 ;;; | macOS   | `$HOME`/Music      | /Users/Alice/Music   |
 ;;; | Windows | `{FOLDERID_Music}` | C:\Users\Alice\Music |
 
-(defun audio() (dispatch 'audio))
+(defun audio() (assemble 'audio '()))
+(defun audio(path-segs) (assemble 'audio path-segs))
 
 ;;; Returns the path to the user's desktop directory.
 ;;;
@@ -184,7 +205,8 @@
 ;;; | macOS   | `$HOME`/Desktop      | /Users/Alice/Desktop   |
 ;;; | Windows | `{FOLDERID_Desktop}` | C:\Users\Alice\Desktop |
 
-(defun desktop() (dispatch 'desktop))
+(defun desktop () (assemble 'desktop '()))
+(defun desktop (path-segs) (assemble 'desktop path-segs))
 
 ;;; Returns the path to the user's document directory.
 ;;;
@@ -196,7 +218,8 @@
 ;;; | macOS   | `$HOME`/Documents      | /Users/Alice/Documents   |
 ;;; | Windows | `{FOLDERID_Documents}` | C:\Users\Alice\Documents |
 
-(defun document() (dispatch 'document))
+(defun document () (assemble 'document '()))
+(defun document (path-segs) (assemble 'document path-segs))
 
 ;;; Returns the path to the user's download directory.
 ;;;
@@ -208,7 +231,8 @@
 ;;; | macOS   | `$HOME`/Downloads      | /Users/Alice/Downloads   |
 ;;; | Windows | `{FOLDERID_Downloads}` | C:\Users\Alice\Downloads |
 
-(defun download() (dispatch 'download))
+(defun download () (assemble 'download '()))
+(defun download (path-segs) (assemble 'download path-segs))
 
 ;;; Returns the path to the user's font directory.
 ;;;
@@ -220,7 +244,8 @@
 ;;; | macOS   | `$HOME/Library/Fonts`                                | /Users/Alice/Library/Fonts     |
 ;;; | Windows | –                                                    | –                              |
 
-(defun font() (dispatch 'font))
+(defun font () (assemble 'font '()))
+(defun font (path-segs) (assemble 'font path-segs))
 
 ;;; Returns the path to the user's picture directory.
 ;;;
@@ -232,7 +257,8 @@
 ;;; | macOS   | `$HOME`/Pictures      | /Users/Alice/Pictures   |
 ;;; | Windows | `{FOLDERID_Pictures}` | C:\Users\Alice\Pictures |
 
-(defun picture() (dispatch 'picture))
+(defun picture () (assemble 'picture '()))
+(defun picture (path-segs) (assemble 'picture path-segs))
 
 ;;; Returns the path to the user's public directory.
 ;;;
@@ -244,7 +270,8 @@
 ;;; | macOS   | `$HOME`/Public        | /Users/Alice/Public |
 ;;; | Windows | `{FOLDERID_Public}`   | C:\Users\Public     |
 
-(defun public() (dispatch 'public))
+(defun public () (assemble 'public '()))
+(defun public (path-segs) (assemble 'hopublicme path-segs))
 
 ;;; Returns the path to the user's template directory.
 ;;;
@@ -256,7 +283,8 @@
 ;;; | macOS   | –                      | –                                                          |
 ;;; | Windows | `{FOLDERID_Templates}` | C:\Users\Alice\AppData\Roaming\Microsoft\Windows\Templates |
 
-(defun template() (dispatch 'template))
+(defun template () (assemble 'template '()))
+(defun template (path-segs) (assemble 'template path-segs))
 
 ;;; Returns the path to the user's video directory.
 ;;;
@@ -268,9 +296,18 @@
 ;;; | macOS   | `$HOME`/Movies      | /Users/Alice/Movies   |
 ;;; | Windows | `{FOLDERID_Videos}` | C:\Users\Alice\Videos |
 
-(defun video() (dispatch 'video))
+(defun video () (assemble 'video '()))
+(defun video (path-segs) (assemble 'video path-segs))
 
 ;;; Private functions
+
+(defun assemble
+  ((dir-type '())
+   (dispatch dir-type))
+  ((dir-type path-segs)
+   (case (dispatch dir-type)
+     ('undefined 'undefined)
+     (prefix (dirs-common:norm-path prefix path-segs)))))
 
 (defun dispatch (dir-type)
   ;; Erlang supports some of these natively, but the results in Erlang are not

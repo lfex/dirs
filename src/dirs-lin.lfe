@@ -26,11 +26,11 @@
 ;;; Private Functions
 
 (defun config ()
-  (env-or-default "XDG_CONFIG_HOME" (dirs-common:home-subdir '(".config"))))
+  (env-or-default "XDG_CONFIG_HOME" (dirs-common:home-subdir ".config")))
 
 (defun data ()
   (env-or-default "XDG_DATA_HOME" (dirs-common:home-subdir '(".local" "share"))))
-  
+
 (defun env-or-default (env-var default)
   (case (os:getenv env-var)
     ("" default)

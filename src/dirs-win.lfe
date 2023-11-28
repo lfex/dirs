@@ -2,10 +2,6 @@
   (export
    (assemble 1)))
 
-;;extern crate dirs_sys;
-
-;;use std::path::PathBuf;
-
 ;;pub fn home_dir()         -> Option<PathBuf> { dirs_sys::known_folder_profile() }
 
 ;;pub fn cache_dir()        -> Option<PathBuf> { data_local_dir() }
@@ -35,9 +31,9 @@
   (('state) 'undefined)
   (('font) 'undefined)
   ;; Erlang-supported
-  (('cache) (filename:basedir 'user_cache ""))
-  (('config) (filename:basedir 'user_config ""))
-  (('config-local) (filename:basedir 'user_config ""))
-  (('data) (filename:basedir 'user_config "share"))
+  ;;(('cache) (filename:basedir 'user_cache ""))
+  ;;(('config) (filename:basedir 'user_config ""))
+  ;;(('config-local) (filename:basedir 'user_config ""))
+  ;;(('data) (filename:basedir 'user_config "share"))
   ;; Custom
   )
