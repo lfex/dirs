@@ -93,7 +93,7 @@ Note that all `dirs:*` functions support an additional arity, allowing one to ap
 
 ## Design Goals
 
-- The _dirs_ library is a low-level crate designed to provide the paths to standard directories
+- The `dirs` library is a low-level one, designed to provide the paths to standard directories
   as defined by operating systems rules or conventions.<br/>
   If your requirements are more complex, e. g. computing cache, config, etc. paths for specific
   applications or projects, consider writing something higher-level that uses `dirs` -- let us know if you do, and we'll link to it!
@@ -144,7 +144,7 @@ Note that all `dirs:*` functions support an additional arity, allowing one to ap
 
 Apache License, Version 2.0
 
-Copyright © 2023, Duncan McGreggor <oubiwann@gmail.com>.
+Copyright © 2023-2024, Duncan McGreggor <oubiwann@gmail.com>.
 
 [//]: ---Named-Links---
 
