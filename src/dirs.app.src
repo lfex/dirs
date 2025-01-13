@@ -1,5 +1,5 @@
 {application, dirs, [
-  {description, "A low-level library that provides config/cache/data paths, following the respective conventions on Linux, macOS and Windows"},
+  {description, "A low-level LFE/Erlang library that provides standard config/cache/data paths, following the respective conventions on Linux, macOS and Windows"},
   {vsn, "0.2.0"},
   {registered, []},
   {mod, {}},
@@ -10,14 +10,14 @@
   {env,[]},
   {modules, []},
 
-  {licenses, ["Apache 2.0"]},
+  {licenses, ["Apache-2.0"]},
   {links, [
     {"GitHub", "https://github.com/lfex/dirs"},
     {"Hex", "https://hex.pm/packages/dirs"}
   ]},
-  {exclude_files, [
-    "priv/html/*",
-    "priv/images/*",
+  {exclude_paths, [
+    "priv/html",
+    "priv/images",
     "priv/.DS_Store"
   ]}
  ]}.
