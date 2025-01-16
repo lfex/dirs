@@ -160,7 +160,7 @@ Copyright © 2023-2025, Duncan McGreggor <oubiwann@gmail.com>.
 [versions]: https://github.com/lfex/dirs/blob/main/rebar.config
 [github-tags]: https://github.com/lfex/dirs/tags
 [github-tags-badge]: https://img.shields.io/github/tag/lfex/dirs.svg
-[github-downloads]: https://img.shields.io/github/downloads/ut-proj/underack/total.svg
-[hex-badge]: https://img.shields.io/hexpm/v/underack.svg?maxAge=2592000
-[hex-package]: https://hex.pm/packages/underack
-[hex-downloads]: https://img.shields.io/hexpm/dt/underack.svg
+[github-downloads]: https://img.shields.io/github/downloads/lfex/dirs/total.svg
+[hex-badge]: https://img.shields.io/hexpm/v/dirs.svg?maxAge=2592000
+[hex-package]: https://hex.pm/packages/dirs
+[hex-downloads]: https://img.shields.io/hexpm/dt/dirs.svg
