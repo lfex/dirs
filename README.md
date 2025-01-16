@@ -1,13 +1,14 @@
-[![Build Status][gh-actions-badge]][gh-actions]
-[![LFE Versions][lfe badge]][lfe]
-[![Erlang Versions][erlang badge]][versions]
-[![Tags][github tags badge]][github tags]
-
-[![Project Logo][logo]][logo-large]
-
 # `dirs`
 
+[![Build Status][gh-actions-badge]][gh-actions]
+[![LFE Versions][lfe-badge]][lfe]
+[![Erlang Versions][erlang-badge]][versions]
+[![Tags][github-tags-badge]][github-tags]
+[![Downloads][hex-downloads]][hex-package]
+
 *A low-level library that provides standard config/cache/data paths, following the respective conventions on Linux, macOS and Windows (port of the Rust `dirs` library to LFE/Erlang)*
+
+[![Project Logo][logo]][logo-large]
 
 ## Introduction
 
@@ -144,7 +145,7 @@ Note that all `dirs:*` functions support an additional arity, allowing one to ap
 
 Apache License, Version 2.0
 
-Copyright © 2023-2024, Duncan McGreggor <oubiwann@gmail.com>.
+Copyright © 2023-2025, Duncan McGreggor <oubiwann@gmail.com>.
 
 [//]: ---Named-Links---
 
@@ -154,8 +155,12 @@ Copyright © 2023-2024, Duncan McGreggor <oubiwann@gmail.com>.
 [gh-actions-badge]: https://github.com/lfex/dirs/workflows/ci%2Fcd/badge.svg
 [gh-actions]: https://github.com/lfex/dirs/actions
 [lfe]: https://github.com/lfe/lfe
-[lfe badge]: https://img.shields.io/badge/lfe-2.1+-blue.svg
-[erlang badge]: https://img.shields.io/badge/erlang-21%20to%2025-blue.svg
+[lfe-badge]: https://img.shields.io/badge/lfe-2.1+-blue.svg
+[erlang-badge]: https://img.shields.io/badge/erlang-21%20to%2025-blue.svg
 [versions]: https://github.com/lfex/dirs/blob/main/rebar.config
-[github tags]: https://github.com/lfex/dirs/tags
-[github tags badge]: https://img.shields.io/github/tag/lfex/dirs.svg
+[github-tags]: https://github.com/lfex/dirs/tags
+[github-tags-badge]: https://img.shields.io/github/tag/lfex/dirs.svg
+[github-downloads]: https://img.shields.io/github/downloads/ut-proj/underack/total.svg
+[hex-badge]: https://img.shields.io/hexpm/v/underack.svg?maxAge=2592000
+[hex-package]: https://hex.pm/packages/underack
+[hex-downloads]: https://img.shields.io/hexpm/dt/underack.svg
