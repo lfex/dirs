@@ -1,6 +1,6 @@
 {application, dirs, [
   {description, "A low-level LFE/Erlang library that provides standard config/cache/data paths, following the respective conventions on Linux, macOS and Windows"},
-  {vsn, "0.2.1"},
+  {vsn, "0.3.0"},
   {registered, []},
   {mod, {}},
   {applications, [
