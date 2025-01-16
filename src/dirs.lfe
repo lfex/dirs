@@ -18,7 +18,10 @@
    (picture 0) (picture 1)
    (public 0) (public 1)
    (template 0) (template 1)
-   (video 0) (video 1)))
+   (video 0) (video 1))
+  ;; utility functions useful for external projects
+  (export
+   (assemble 2)))
 
 ;;; Returns the path to the user's home directory.
 ;;;
